@@ -1,0 +1,13 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:Schwertbot"
+
+    - path: "app/Main.hs"
+      component: "Schwertbot:exe:Schwertbot-exe"
+
+    - path: "app/Paths_Schwertbot.hs"
+      component: "Schwertbot:exe:Schwertbot-exe"
+
+    - path: "test"
+      component: "Schwertbot:test:Schwertbot-test"
