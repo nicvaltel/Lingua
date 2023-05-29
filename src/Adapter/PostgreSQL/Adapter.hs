@@ -24,6 +24,7 @@ import Domain.Model
   )
 import qualified Domain.Model as M
 import UnliftIO (throwString)
+import Data.Either.Combinators(mapLeft)
 
 getUserById :: PG r m => UserId -> m (Maybe User)
 getUserById uid = do
@@ -57,12 +58,13 @@ insertMsg uId text = do
   where
     qryStr = "insert into rusrom.messages (user_id, text) values (?,?) returning id, sent"
 
-translateWord :: PG r m => Text -> m (Either TranslateError (Text, Text))
+translateWord :: PG r m => Text -> m (Either Text (Text, Text))
 translateWord wordUnclean = do
   let word = M.cleanWord wordUnclean
   if M.isRussianWord word
-    then translateRus2Rom word
-    else translateRom2Rus word
+    then (mapLeft (\_ -> "Переведи с русского на румынский: " <> M.getCleanText word)) <$> (translateRus2Rom word)
+    else (mapLeft (\_ -> "Переведи с румынского на русский: " <> M.getCleanText word)) <$> (translateRom2Rus word)
+
 
 translateRus2Rom :: PG r m => M.CleanText -> m (Either TranslateError (Text, Text))
 translateRus2Rom word = do

@@ -37,6 +37,12 @@ dependencies:
 - exceptions
 - resource-pool
 - unliftio
+- containers
+- http-client
+- http-client-tls
+- openai-hs
+- openai-servant
+
 
 default-extensions:
 - OverloadedStrings

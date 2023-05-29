@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.34.5.
 --
 -- see: https://github.com/sol/hpack
 
@@ -27,6 +27,7 @@ library
   exposed-modules:
       Adapter.PostgreSQL.Adapter
       Adapter.PostgreSQL.Common
+      Chat
       Domain.Bot
       Domain.Model
       Lib
@@ -34,16 +35,24 @@ library
       Paths_Lingua
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings QuasiQuotes NamedFieldPuns
+  default-extensions:
+      OverloadedStrings
+      QuasiQuotes
+      NamedFieldPuns
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
     , bytestring
+    , containers
     , data-has
     , dotenv
     , either
     , exceptions
+    , http-client
+    , http-client-tls
     , mtl
+    , openai-hs
+    , openai-servant
     , postgresql-simple
     , postgresql-simple-migration
     , record-hasfield
@@ -62,17 +71,25 @@ executable Lingua-exe
       Paths_Lingua
   hs-source-dirs:
       app
-  default-extensions: OverloadedStrings QuasiQuotes NamedFieldPuns
+  default-extensions:
+      OverloadedStrings
+      QuasiQuotes
+      NamedFieldPuns
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Lingua
     , base >=4.7 && <5
     , bytestring
+    , containers
     , data-has
     , dotenv
     , either
     , exceptions
+    , http-client
+    , http-client-tls
     , mtl
+    , openai-hs
+    , openai-servant
     , postgresql-simple
     , postgresql-simple-migration
     , record-hasfield

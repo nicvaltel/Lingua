@@ -1,4 +1,4 @@
-# Changelog for `Schwertbot`
+# Changelog for `Lingua`
 
 All notable changes to this project will be documented in this file.
 

@@ -6,7 +6,7 @@
 module Adapter.PostgreSQL.Common
   ( AppState,
     PG,
-    getToken,
+    DBConfig(..),
     readDBConfig,
     withAppState,
     withConn,
@@ -48,29 +48,22 @@ data DBConfig = DBConfig
     dbPassword :: String,
     dbStripeCount :: Int,
     dbMaxOpenConnPerStripe :: Int,
-    dbIdleConnTimeout :: Double,
-    dbBotToken :: String
+    dbIdleConnTimeout :: Double
   }
   deriving (Show)
 
-getToken :: DBConfig -> String
-getToken = dbBotToken
+readDBConfig :: [(String, String)] -> Either String DBConfig
+readDBConfig env = do
+  dbHost <- maybeToRight "No Hostname defined" (lookup "POSTGRES_HOST" env)
+  dbPort <- maybeToRight "No port number defined" (read <$> lookup "POSTGRES_PORT" env)
+  dbName <- maybeToRight "No database name defined" (lookup "POSTGRES_DB" env)
+  dbUser <- maybeToRight "No username defined" (lookup "POSTGRES_USER" env)
+  dbPassword <- maybeToRight "No password defined" (lookup "POSTGRES_PASSWORD" env)
+  dbStripeCount <- maybeToRight "No stripe count defined" (read <$> lookup "POSTGRES_STRIPE_COUNT" env)
+  dbMaxOpenConnPerStripe <- maybeToRight "No max open connections per stripe defined" (read <$> lookup "POSTGRES_MAX_OPEN_CONN_PER_STRIPE" env)
+  dbIdleConnTimeout <- maybeToRight "No stripe count defined" (read <$> lookup "POSTGRES_IDLE_CONN_TIMEOUT" env)
+  pure DBConfig {dbHost, dbPort, dbName, dbUser, dbPassword, dbStripeCount, dbMaxOpenConnPerStripe, dbIdleConnTimeout}
 
-readDBConfig :: String -> IO (Either String DBConfig)
-readDBConfig file = do
-  env <- parseFile file
-  let result :: Either String DBConfig = do
-        dbHost <- maybeToRight "No Hostname defined" (lookup "POSTGRES_HOST" env)
-        dbPort <- maybeToRight "No port number defined" (read <$> lookup "POSTGRES_PORT" env)
-        dbName <- maybeToRight "No database name defined" (lookup "POSTGRES_DB" env)
-        dbUser <- maybeToRight "No username defined" (lookup "POSTGRES_USER" env)
-        dbPassword <- maybeToRight "No password defined" (lookup "POSTGRES_PASSWORD" env)
-        dbStripeCount <- maybeToRight "No stripe count defined" (read <$> lookup "POSTGRES_STRIPE_COUNT" env)
-        dbMaxOpenConnPerStripe <- maybeToRight "No max open connections per stripe defined" (read <$> lookup "POSTGRES_MAX_OPEN_CONN_PER_STRIPE" env)
-        dbIdleConnTimeout <- maybeToRight "No stripe count defined" (read <$> lookup "POSTGRES_IDLE_CONN_TIMEOUT" env)
-        dbBotToken <- maybeToRight "No TOKEN defined" (lookup "BOT_TOKEN" env)
-        pure DBConfig {dbHost, dbPort, dbName, dbUser, dbPassword, dbStripeCount, dbMaxOpenConnPerStripe, dbIdleConnTimeout, dbBotToken}
-  pure result
 
 migrate :: Pool Connection -> IO ()
 migrate pool = withResource pool $ \conn -> do

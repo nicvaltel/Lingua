@@ -3,4 +3,4 @@ module Main (main) where
 import Lib (runBot)
 
 main :: IO ()
-main = runBot
+main = runBot "app-db-config.env"

@@ -1,1 +1,1 @@
-# Schwertbot
+# Lingua - Translator Bot
