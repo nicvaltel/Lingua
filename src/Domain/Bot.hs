@@ -84,7 +84,6 @@ actionRoutine botModel userMsg usrId = do
   case eitherResult of
     Right (wRom, wRus) -> replyString $ wRom <> ": " <> wRus
     Left translateQueryToOpenAI -> do
-      replyString msgWait
       chatAns <- liftIO $ M.sendRequestToChat botModel translateQueryToOpenAI
       case chatAns of
         Right answer -> replyString answer
@@ -100,6 +99,6 @@ actionNewUser = do
   replyString "Я бот-переводчик с румынского на русский язык. Напишите слово, чтобы я перевел его."
   replyString "Sunt un bot traducător din limba rusă în limba română. Scrieți un cuvânt pentru a-l traduce."
 
-msgTryToRepeat, msgWait :: Text
-msgTryToRepeat = "Не удалось получить ответ. Попробуйте повторить запрос."
-msgWait = "Un moment..."
+msgTryToRepeat:: Text
+msgTryToRepeat = "Nu am reușit să traduc. Не удалось перевести."
+

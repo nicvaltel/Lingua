@@ -48,7 +48,7 @@ extractContentFromChatChoise = chmContent . chchMessage
 
 run :: T.Text -> IO ()
 run queryMsg = do
-  result <- sendRequestToChat (T.pack "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") queryMsg
+  result <- sendRequestToChat (T.pack "") queryMsg
   case result of
     Left err -> print err
     Right answer -> T.putStrLn answer
